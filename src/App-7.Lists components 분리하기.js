@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import Lists from './components/Lists';
-import Form from './components/Form';
-
-const localTodoList = localStorage.getItem("todoList") ? JSON.parse(localStorage.getItem("todoList")) : [];
 
 export default function App() {
 
-    const [ todoList, setTodoList ] = useState(localTodoList);
+const [ todoList, setTodoList ] = useState([]);
+
+    const textChange = (e) => {
+        /* console.log('e', e.target.value) */
+        setValue(e.target.value);
+
+    }
     const [value, setValue] = useState("");
 
     const btnSubmit = (e) => {
@@ -17,14 +20,8 @@ export default function App() {
             title: value,
             completed:false
         }
-        if(value.trim().length !== 0) {} else {alert("")}
         setTodoList(prev => [...prev, newTodo])
-        localStorage.setItem("todoList",JSON.stringify([...todoList, newTodo]));
         setValue("");
-    }
-    const deleteAll = () => {
-        setTodoList([]);
-        localStorage.setItem("todoList", JSON.stringify([]));
     }
 
   return (
@@ -32,10 +29,12 @@ export default function App() {
         <div className="todoBlock">
             <div className="title">
                 <h1>To Do List</h1>
-                <button className='deleteBtn' onClick={deleteAll}>Delete All</button>
             </div>
             <Lists todoList={todoList} setTodoList={setTodoList}/>
-            <Form value={value} setValue={setValue} btnSubmit={btnSubmit}/>
+            <form style= {{display:'flex'}} onSubmit={btnSubmit}>
+                <input type="text" name='value' style={{flex:'10', padding:'5px'}} placeholder="해야할 일을 입력하세요" onChange={textChange} value={value}/>
+                <input type="submit" value="입력" style={{flex:'1'}} />
+            </form>
         </div>
     
     </div>
